@@ -8,30 +8,51 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: VenteRepository::class)]
+
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'vente:item']),
+        new GetCollection(normalizationContext: ['groups' => 'vente:list'])
+    ],
+    order: ['nom' => 'ASC', ],
+    paginationEnabled: false,
+)]
 class Vente
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['vente:list', 'vente:item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['vente:list', 'vente:item'])]
     private ?\DateTimeInterface $date_debut = null;
+   
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['vente:list', 'vente:item'])]
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['vente:list', 'vente:item'])]
     private ?\DateTimeInterface $date_vente = null;
 
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'vente', targetEntity: Lot::class)]
+    #[Groups(['vente:list', 'vente:item'])]
     private Collection $lots;
 
     #[ORM\ManyToOne(inversedBy: 'ventes')]
+    #[Groups(['vente:list', 'vente:item'])]
     private ?CategorieDeVente $categorieDeVentes = null;
 
    

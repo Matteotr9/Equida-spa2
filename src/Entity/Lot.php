@@ -21,6 +21,7 @@ class Lot
 
 
     #[ORM\ManyToOne(inversedBy: 'lots')]
+    #[Groups(['lot:item'])]
     private ?Vente $vente = null;
 
     #[ORM\OneToMany(mappedBy: 'lot', targetEntity: Enchere::class)]

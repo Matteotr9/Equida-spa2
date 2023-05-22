@@ -10,6 +10,10 @@ use App\Entity\CategorieDeVente;
 use App\Entity\Vente;
 use App\Entity\Client;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use App\Form\VenteType;
 
 class VenteController extends AbstractController
@@ -28,6 +32,29 @@ class VenteController extends AbstractController
         ]);
     }
 
+    #[Route('api/vente/lister', name: 'app_vente_lister_api')
+    ]
+    public function getLesVentesapi(ManagerRegistry $doctrine): Response
+    {   
+        $entityManager = $doctrine->getManager();
+        $ventes = $entityManager->getRepository(Vente::class)->findAll();
+       /* $ventes = $this->getDoctrine()
+            ->getRepository(Vente::class)
+            ->findAll();*/
+
+        /*return $this->render('api/vente/lister_ventes.json', [
+            'ventes' => $ventes,
+        ]);*/
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+    
+        $serializer = new Serializer($normalizers, $encoders);
+        $repository = $doctrine->getRepository(Vente::class);
+        $etudiants= $repository->findAll();
+        $jsonContent = $serializer->serialize($ventes, 'json');
+        return new Response($jsonContent)   ;
+    }
 
     #[Route('/vente/consulter/{idvente}', name:'app_vente_consulter')]
     public function consulterVente($idvente, Request $request, ManagerRegistry $doctrine): Response
