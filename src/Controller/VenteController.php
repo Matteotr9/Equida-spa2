@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Serializer\AbstractItemNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,7 @@ class VenteController extends AbstractController
     {   
         $entityManager = $doctrine->getManager();
         $ventes = $entityManager->getRepository(Vente::class)->findAll();
+
        /* $ventes = $this->getDoctrine()
             ->getRepository(Vente::class)
             ->findAll();*/
@@ -50,9 +52,8 @@ class VenteController extends AbstractController
         $normalizers = [new ObjectNormalizer()];
     
         $serializer = new Serializer($normalizers, $encoders);
-        $repository = $doctrine->getRepository(Vente::class);
-        $etudiants= $repository->findAll();
-        $jsonContent = $serializer->serialize($ventes, 'json');
+
+        $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
         return new Response($jsonContent)   ;
     }
 

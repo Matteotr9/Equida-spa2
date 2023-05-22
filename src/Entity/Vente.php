@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 
 #[ORM\Entity(repositoryClass: VenteRepository::class)]
 
@@ -53,6 +55,7 @@ class Vente
 
     #[ORM\ManyToOne(inversedBy: 'ventes')]
     #[Groups(['vente:list', 'vente:item'])]
+    #[Ignore]
     private ?CategorieDeVente $categorieDeVentes = null;
 
    

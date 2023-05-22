@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use App\Entity\Cheval;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: LotRepository::class)]
 class Lot
@@ -22,9 +23,11 @@ class Lot
 
     #[ORM\ManyToOne(inversedBy: 'lots')]
     #[Groups(['lot:item'])]
+    #[Ignore]
     private ?Vente $vente = null;
 
     #[ORM\OneToMany(mappedBy: 'lot', targetEntity: Enchere::class)]
+    #[Ignore]
     private Collection $encheres;
 
   
