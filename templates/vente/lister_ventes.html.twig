@@ -1,0 +1,34 @@
+{# templates/vente/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des ventes</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Date debut</th>
+                <th>Date fin</th>
+                <th>Categorie de Vente</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vente in ventes %}
+                <tr>
+                    <td> <a href="{{ path('app_vente_consulter', { 'idvente': vente.id}) }}">{{ vente.nom }}</a></td>
+                   
+                    <td>{{ vente.dateDebut|date('d/m/Y') }}</td>
+                    <td>{{ vente.dateFin|date('d/m/Y') }}</td>
+                    <td>{{vente.categorieDeVentes.libelle }}</td>
+
+                   
+                    
+                   
+                </tr>
+                
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

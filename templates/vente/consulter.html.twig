@@ -1,0 +1,28 @@
+{# templates/vente/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <table>
+  
+<h1>Vente : {{ ventes.nom }} du {{ ventes.dateDebut|date('d/m/Y') }} au {{ ventes.dateFin|date('d/m/Y')}}  </h1>
+ {% for l in ventes.lots  %}  
+ <tr> 
+     
+      
+        <th>Nom du Cheval : </th>
+       <td><a href="{{ path('app_cheval_consulter', { 'idCheval': l.cheval.id }) }}">{{ l.cheval.nom }}</a></td>
+    
+        <th>Race : </th>
+        <td>{{ l.cheval.race.libellle}}</td>
+   
+      
+        <th>Mise A prix : </th>
+        <td>{{ l.miseAPrix }}</td>
+    
+    </tr>
+    
+
+{% endfor %}
+</table>
+{% endblock %}
