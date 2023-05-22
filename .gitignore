@@ -8,8 +8,13 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-/node_modules/
-/public/
-/npm-debug.log
-# used later by Cordova
-/app/
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
