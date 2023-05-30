@@ -36,7 +36,7 @@ class VenteController extends AbstractController
     #[Route('api/vente/lister', name: 'app_vente_lister_api')
     ]
     public function getLesVentesapi(ManagerRegistry $doctrine): Response
-    {   
+    {
         $entityManager = $doctrine->getManager();
         $ventes = $entityManager->getRepository(Vente::class)->findAll();
 
@@ -50,7 +50,7 @@ class VenteController extends AbstractController
 
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
-    
+
         $serializer = new Serializer($normalizers, $encoders);
 
         $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
@@ -73,6 +73,30 @@ class VenteController extends AbstractController
     ]);
 
     }
+
+
+
+    #[Route('api/vente/consulter/{idvente}', name:'app_vente_consulter_api')]
+    public function consulterVenteapi($idvente, Request $request, ManagerRegistry $doctrine): Response
+    {
+
+        // Récupération du cheval correspondant à l'identifiant
+        $ventes = $doctrine->getRepository(Vente::class)->find(intval($idvente));
+        // Vérification si le cheval existe
+
+
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
+        return new Response($jsonContent);
+
+
+    }
+
 
 
     #[Route('/vente/nouveau', name:'app_vente_nouveau')]
