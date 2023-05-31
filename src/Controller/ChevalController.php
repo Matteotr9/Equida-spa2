@@ -68,6 +68,30 @@ class ChevalController extends AbstractController
 
 
 
+
+    #[Route('api/cheval/consulter/{idCheval}', name:'app_cheval_consulter_api')]
+    public function consulterChevalapi($idCheval, Request $request, ManagerRegistry $doctrine): Response
+    {
+
+        // Récupération du cheval correspondant à l'identifiant
+        $cheval = $doctrine->getRepository(Cheval::class)->find(intval($idCheval));
+        // Vérification si le cheval existe
+
+
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $jsonContent = $serializer->serialize($cheval, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
+        return new Response($jsonContent);
+    ;
+
+    }
+
+
+
     
     #[Route('/cheval/modifier/{id}', name:'app_cheval_modifier')]
     
