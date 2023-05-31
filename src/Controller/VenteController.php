@@ -17,6 +17,8 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use App\Form\VenteType;
 
+
+
 class VenteController extends AbstractController
 {
     #[Route('/vente/lister', name: 'app_vente_lister')]

@@ -12,6 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use Nelmio\CorsBundle\NelmioCorsBundle;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\AbstractItemNormalizer ;
+
 
 class ChevalController extends AbstractController
 {
@@ -128,6 +134,24 @@ class ChevalController extends AbstractController
         ]);
     }
 
+    #[Route('api/cheval/lister', name: 'app_cheval_lister_api')]
+    public function getLesChevalsapi(ManagerRegistry $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $chevals = $entityManager->getRepository(Cheval::class)->findAll();
+        /* $ventes = $this->getDoctrine()
+             ->getRepository(Vente::class)
+             ->findAll();*/
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $jsonContent = $serializer->serialize($chevals, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
+        return new Response($jsonContent);
+
+    }
 
 
 

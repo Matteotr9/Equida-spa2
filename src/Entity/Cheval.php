@@ -14,9 +14,11 @@ class Cheval
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 40)]
+
     private ?string $nom = null;
 
     #[ORM\Column]
