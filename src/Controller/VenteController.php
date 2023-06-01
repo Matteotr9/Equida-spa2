@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,22 +42,24 @@ class VenteController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $ventes = $entityManager->getRepository(Vente::class)->findAll();
+        $jsonContent = [];
+        foreach ($ventes as $vente){
+            $nomVente= $vente->getNom();
+            $dateDebutVente=$vente->getDateDebut();
+             $dateFinVente=$vente->getDateFin();
+            $libelleCategorieDeVente=$vente->getCategorieDeVentes()->getLibelle();
+            $listeVente = ["nomVente"=>$nomVente,"dateDebutVente"=>$dateDebutVente,"dateFinVente"=>$dateFinVente,"libelleCategorieDeVente"=>$libelleCategorieDeVente];
+            array_push($jsonContent, $listeVente);
+        }
+   //**
+   //    $encoders = [new XmlEncoder(), new JsonEncoder()];
+   //    $normalizers = [new ObjectNormalizer()];
 
-       /* $ventes = $this->getDoctrine()
-            ->getRepository(Vente::class)
-            ->findAll();*/
+   //    $serializer = new Serializer($normalizers, $encoders);
 
-        /*return $this->render('api/vente/lister_ventes.json', [
-            'ventes' => $ventes,
-        ]);*/
-
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-
-        $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
-        return new Response($jsonContent)   ;
+   //    $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
+     //
+                return new JsonResponse($jsonContent)   ;
     }
 
     #[Route('/vente/consulter/{idvente}', name:'app_vente_consulter')]

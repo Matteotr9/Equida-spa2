@@ -18,12 +18,11 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractItemNormalizer ;
 
-
 class ChevalController extends AbstractController
 {
-    
+
     #[Route('/cheval/nouveau', name:'app_cheval_nouveau')]
-    
+
     public function nouveau(Request $request, ManagerRegistry $doctrine): Response
     {
 
@@ -133,7 +132,6 @@ class ChevalController extends AbstractController
             'chevals' => $chevals,
         ]);
     }
-
     #[Route('api/cheval/lister', name: 'app_cheval_lister_api')]
     public function getLesChevalsapi(ManagerRegistry $doctrine): Response
     {
@@ -152,6 +150,7 @@ class ChevalController extends AbstractController
         return new Response($jsonContent);
 
     }
+
 
 
 
