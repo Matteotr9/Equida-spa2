@@ -81,26 +81,31 @@ class VenteController extends AbstractController
 
 
 
-    #[Route('api/vente/consulter/{idvente}', name:'app_vente_consulter_api')]
-    public function consulterVenteapi($idvente, Request $request, ManagerRegistry $doctrine): Response
+    #[Route('api/vente/consulter/{id}', name: 'app_vente_get_api', methods: ['GET'])]
+    public function getVenteApi(int $id, ManagerRegistry $doctrine): Response
     {
+        $entityManager = $doctrine->getManager();
+        $vente = $entityManager->getRepository(Vente::class)->find($id);
 
-        // Récupération du cheval correspondant à l'identifiant
-        $ventes = $doctrine->getRepository(Vente::class)->find(intval($idvente));
-        // Vérification si le cheval existe
+        if (!$vente) {
+            return new JsonResponse(['error' => 'Vente not found'], Response::HTTP_NOT_FOUND);
+        }
 
+        $lots = $vente->getLots();
 
+        $jsonContent = [];
+        foreach ($lots as $lot) {
+            $lotChevalId = $lot->getCheval()->getId();
+            $lotChevalNom = $lot->getCheval()->getNom();
+            $lotChevalRaceLibelle = $lot->getCheval()->getRace()->getLibellle();
+            $lotMiseAPrix= $lot->getMiseAPrix();
+            $listelot = ["lotChevalNom" => $lotChevalNom, "lotChevalRaceLibelle" => $lotChevalRaceLibelle, "lotMiseAPrix" => $lotMiseAPrix];
+            array_push($jsonContent, $listelot);
+        }
 
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-
-        $jsonContent = $serializer->serialize($ventes, 'json',[AbstractItemNormalizer::IGNORED_ATTRIBUTES=>['categorieDeVentes','lots']]);
-        return new Response($jsonContent);
-
-
+        return new JsonResponse($jsonContent);
     }
+
 
 
 
