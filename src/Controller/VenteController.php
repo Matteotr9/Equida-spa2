@@ -45,10 +45,11 @@ class VenteController extends AbstractController
         $jsonContent = [];
         foreach ($ventes as $vente){
             $nomVente= $vente->getNom();
+            $idVente=$vente->getId();
             $dateDebutVente=$vente->getDateDebut();
              $dateFinVente=$vente->getDateFin();
             $libelleCategorieDeVente=$vente->getCategorieDeVentes()->getLibelle();
-            $listeVente = ["nomVente"=>$nomVente,"dateDebutVente"=>$dateDebutVente,"dateFinVente"=>$dateFinVente,"libelleCategorieDeVente"=>$libelleCategorieDeVente];
+            $listeVente = ["nomVente"=>$nomVente,"dateDebutVente"=>$dateDebutVente,"dateFinVente"=>$dateFinVente,"libelleCategorieDeVente"=>$libelleCategorieDeVente,"idVente"=>$idVente];
             array_push($jsonContent, $listeVente);
         }
    //**
