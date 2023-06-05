@@ -100,7 +100,7 @@ class VenteController extends AbstractController
             $lotChevalNom = $lot->getCheval()->getNom();
             $lotChevalRaceLibelle = $lot->getCheval()->getRace()->getLibellle();
             $lotMiseAPrix= $lot->getMiseAPrix();
-            $listelot = ["lotChevalNom" => $lotChevalNom, "lotChevalRaceLibelle" => $lotChevalRaceLibelle, "lotMiseAPrix" => $lotMiseAPrix];
+            $listelot = ["lotChevalNom" => $lotChevalNom, "lotChevalRaceLibelle" => $lotChevalRaceLibelle, "lotMiseAPrix" => $lotMiseAPrix,"lotChevalId"=>$lotChevalId];
             array_push($jsonContent, $listelot);
         }
 
