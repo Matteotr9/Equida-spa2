@@ -7,6 +7,7 @@ use App\Entity\Client;
 use App\Entity\Cheval;
 use App\Entity\Vente;
 use App\Form\ChevalType;
+use Container7nBHreK\getChevalControllerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,21 +85,27 @@ class ChevalController extends AbstractController
             return new JsonResponse(['error' => 'Cheval not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $chevals = $cheval->getId();
-
-        $jsonContent = [];
-        foreach ($chevals as $cheval) {
-            $chevalId = $cheval->getCheval()->getId();
-            $chevalNom = $cheval>getCheval()->getNom();
-            $chevalRaceLibelle = $cheval->getCheval()->getRace()->getLibellle();
-            $chevalPrixDeDepart= $cheval->getCheval()->get;
-            $chevalSexe= $cheval->get ;
-            $listecheval = ["chevalId" => $chevalId, "chevalNom" => $chevalNom, "chevalRaceLibelle" => $chevalRaceLibelle,""];
-            array_push($jsonContent, $listecheval);
-        }
+        $chevalId = $cheval->getId();
+        $chevalNom = $cheval->getNom();
+        $chevalRaceLibelle = $cheval->getRace()->getLibellle();
+        $chevalPrixDeDepart = $cheval->getPrixDeDepart();
+        $chevalSexe = $cheval->getSexe();
+        $chevalSire = $cheval->getSire();
+        $chevalImage = $cheval->getImage();
+        $listecheval = [
+            "chevalId" => $chevalId,
+            "chevalNom" => $chevalNom,
+            "chevalRaceLibelle" => $chevalRaceLibelle,
+            "chevalPrixDeDepart" => $chevalPrixDeDepart,
+            "chevalSexe" => $chevalSexe,
+            "chevalSire" => $chevalSire,
+            "chevalImage" => $chevalImage
+        ];
+        $jsonContent = [$listecheval];
 
         return new JsonResponse($jsonContent);
     }
+
 
 
 
