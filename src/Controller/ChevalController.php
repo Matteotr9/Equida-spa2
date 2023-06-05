@@ -75,21 +75,32 @@ class ChevalController extends AbstractController
     #[Route('api/cheval/consulter/{idCheval}', name: 'app_cheval_consulter_api')]
     public function consulterChevalapi($idCheval, Request $request, ManagerRegistry $doctrine): Response
     {
-
+        $entityManager = $doctrine->getManager();
         // Récupération du cheval correspondant à l'identifiant
         $cheval = $doctrine->getRepository(Cheval::class)->find(intval($idCheval));
         // Vérification si le cheval existe
 
+        if (!$cheval) {
+            return new JsonResponse(['error' => 'Cheval not found'], Response::HTTP_NOT_FOUND);
+        }
 
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $chevals = $cheval->getId();
 
-        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = [];
+        foreach ($chevals as $cheval) {
+            $chevalId = $cheval->getCheval()->getId();
+            $chevalNom = $cheval>getCheval()->getNom();
+            $chevalRaceLibelle = $cheval->getCheval()->getRace()->getLibellle();
+            $chevalPrixDeDepart= $cheval->getCheval()->get;
+            $chevalSexe= $cheval->get ;
+            $listecheval = ["chevalId" => $chevalId, "chevalNom" => $chevalNom, "chevalRaceLibelle" => $chevalRaceLibelle,""];
+            array_push($jsonContent, $listecheval);
+        }
 
-        $jsonContent = $serializer->serialize($cheval, 'json', [AbstractItemNormalizer::IGNORED_ATTRIBUTES => ['categorieDeVentes', 'lots']]);
-        return new Response($jsonContent);;
-
+        return new JsonResponse($jsonContent);
     }
+
+
 
 
     #[Route('/cheval/modifier/{id}', name: 'app_cheval_modifier')]
