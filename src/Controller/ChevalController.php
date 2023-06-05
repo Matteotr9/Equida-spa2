@@ -78,7 +78,7 @@ class ChevalController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         // Récupération du cheval correspondant à l'identifiant
-        $cheval = $doctrine->getRepository(Cheval::class)->find(intval($idCheval));
+        $cheval = $doctrine->getRepository(Cheval::class)->find($idCheval);
         // Vérification si le cheval existe
 
         if (!$cheval) {
@@ -155,10 +155,11 @@ class ChevalController extends AbstractController
 
         $jsonContent = [];
         foreach ($chevals as $cheval) {
+            $chevalId=$cheval->getId();
             $nomCheval = $cheval->getNom();
             $libelleraceDuCheval = $cheval->getRace()->getLibellle();
             $prixDeVenteCheval = $cheval->getPrixDeDepart();
-            $listeCheval = ["nomCheval" => $nomCheval, "libelleraceDuCheval" => $libelleraceDuCheval, "prixDeVenteCheval" => $prixDeVenteCheval];
+            $listeCheval = ["nomCheval" => $nomCheval, "libelleraceDuCheval" => $libelleraceDuCheval, "prixDeVenteCheval" => $prixDeVenteCheval,"chevalId"=>$chevalId];
             array_push($jsonContent, $listeCheval);
 
 
